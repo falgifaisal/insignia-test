@@ -17,5 +17,4 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            echo "Login berhasil ke EC2!"
-            uname -a
+            sh /home/${{ secrets.USER }}/deploy.sh
