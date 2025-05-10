@@ -1,21 +1,17 @@
-name: Deployment
-
-on:
-  push:
+name: Deployment                                                           
+on:                               
+  push: 
     branches: [ main ]
-
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
+  build:
+    runs-on: ubuntu-latest                                                               
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@master
+      # Runs a single command using the runners shell                
+      - name: executing remote ssh commands using ssh key      
+        uses: appleboy/ssh-action@master                      
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.KEY }}
-          port: ${{ secrets.PORT }}
-          script: |
-            echo "Login berhasil ke EC2!"
-            uname -a
+          host: ${{ secrets.HOST }}                     
+          username: ${{ secrets.USERNAME }}                    
+          key: ${{ secrets.KEY }}                              
+          port: ${{ secrets.PORT }}                         
+          script: sh /home/ubuntu/deploy.sh
