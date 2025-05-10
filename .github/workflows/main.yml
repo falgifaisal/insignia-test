@@ -8,7 +8,7 @@ jobs:
     steps:
       # Runs a single command using the runners shell                
       - name: executing remote ssh commands using ssh key      
-        uses: appleboy/ssh-action@master                      
+        uses: easingthemes/ssh-deploy@v5.0.0                      
         with:
           host: ${{ secrets.HOST }}                     
           username: ${{ secrets.USERNAME }}                    
