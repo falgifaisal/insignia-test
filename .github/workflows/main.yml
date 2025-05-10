@@ -2,16 +2,24 @@ name: Deployment
 on:                               
   push: 
     branches: [ main ]
+    
 jobs:
-  build:
-    runs-on: ubuntu-latest                                                               
+  deploy:
+    runs-on: ubuntu-latest
+
     steps:
-      # Runs a single command using the runners shell                
-      - name: executing remote ssh commands using ssh key      
-        uses: easingthemes/ssh-deploy@v5.0.0                      
-        with:
-          host: ${{ secrets.HOST }}                     
-          username: ${{ secrets.USERNAME }}                    
-          key: ${{ secrets.KEY }}                              
-          port: ${{ secrets.PORT }}                         
-          script: sh /home/ubuntu/deploy.sh
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy ke EC2
+        run: |
+          scp -r . ${{ secrets.USER }}@${{ secrets.HOST }}:/home/${{ secrets.USER }}/
+          ssh ${{ secrets.USER }}@${{ secrets.HOST }} 'sh /home//${{ secrets.USER }}/deploy.sh'
+
